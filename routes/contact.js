@@ -7,6 +7,9 @@ const router = express.Router();
 //import Contact model
 const Contact = require("../models/Contact");
 
+//import controllers
+const controllers = require("../controllers/contact.controllers");
+
 //************ Routes ******************/
 
 /**
@@ -29,34 +32,7 @@ router.get("/test", (req, res) => {
  * @access: public
  */
 
-router.post("/add_contact", async (req, res) => {
-  try {
-    const { name, email, phone } = req.body;
-
-    //name and email are required
-    if (!name || !email) {
-      res.status(400).send({ msg: "name and email are required !!" });
-      return;
-    }
-
-    //email is unique
-    {
-      /*const contact = Contact.findOne({ email });
-    if (!contact) {
-      res.status(400).send({ msg: "email should be unique !!" });
-      return;
-    } */
-    }
-
-    const newContact = Contact({ name, email, phone });
-    await newContact.save();
-    res
-      .status(200)
-      .send({ msg: "new contact is successfully added", newContact });
-  } catch (error) {
-    res.status(400).send({ msg: "Can not add contact", error });
-  }
-});
+router.post("/add_contact", controllers.add_contact);
 
 /**
  * @desc: get all contacts
@@ -134,7 +110,7 @@ router.delete("/edit_contact/:id", async (req, res) => {
       .status(200)
       .send({ msg: "contact is successfully updated !!", contactToEdit });
   } catch (error) {
-    res.status(400).send("con not edit contact ", error);
+    res.status(400).send("can not edit contact ", error);
   }
 });
 
